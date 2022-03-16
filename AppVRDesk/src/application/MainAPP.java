@@ -78,12 +78,11 @@ public class MainAPP extends Application {
 			Course1 course = new Course1(item.getId(), item.getTitle(), item.getDescription());
 			courseData.add(course);
 		}
-//		System.out.println(courseData);
+		System.out.println(courseData);
 		return courseData;
 	}
 
 	public static void main(String[] args) {
-		System.out.println(ReadJSON.ReadJSON().toString());
 		courseList = ReadJSON.ReadJSON();
 		launch(args);
 	}

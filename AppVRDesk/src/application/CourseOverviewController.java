@@ -1,6 +1,5 @@
 package application;
 
-import Model.Course;
 import Model.Course1;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -35,6 +34,7 @@ public class CourseOverviewController {
         this.mainAPP = mainApp;
 
         // Add observable list data to the table
+        System.out.println(mainAPP.getCourseData());
         courseTable.setItems(mainAPP.getCourseData());
     }
 		
