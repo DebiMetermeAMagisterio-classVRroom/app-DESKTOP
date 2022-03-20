@@ -1,22 +1,28 @@
 package model;
 
-import java.util.Set;
+import java.util.List;
 
+import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class Subscriber {
-	
-	private Set<Teacher> teachers;
-	
-	private Set<Student> students;
+	@BsonProperty("teachers")
+	private List<Teacher> teachers;
+
+	@BsonProperty("students")
+	private List<Student> students;
+
+	@BsonCreator
+	public Subscriber(@BsonProperty("teachers") List<Teacher> teachers,@BsonProperty("students") List<Student> students){
+		this.teachers = teachers;
+		this.students = students;
+	}
 
 }

@@ -1,71 +1,57 @@
 package Configuration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.mongodb.client.*;
+import model.Course;
+import model.Element;
+import model.Subscriber;
+import model.Teacher;
 import org.bson.Document;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import org.json.simple.JSONObject;
 
 public class ConfigMongoConnection {
 
 	private final static Dotenv DOTENV = Dotenv.configure().directory("./src/main/java/Configuration").load();
-	static MongoDatabase db;
-	static ArrayList<String> colResult = new ArrayList<>();
+	private static MongoDatabase db;
+	private static List<Course> courses = new ArrayList<Course>();
+	private static FindIterable<Document> result;
+	private static List<Document> documents;
+	private ConfigMongoConnection () throws JsonProcessingException {
+		getAll();
 
-	public static ArrayList<String> ConfigMongoConnection () {
-		String uri = "mongodb+srv://ladyangel:12345@proyectovr.jlpld.mongodb.net/vrclassroom?retryWrites=true&w=majority";
-
-		try (MongoClient mongoClient = MongoClients.create(uri)) {
-
-			System.out.println("Connexion creada correctamente");
-			try {
-				db = mongoClient.getDatabase("vrclassroom");
-				System.out.println(db.toString());
-				MongoCollection<Document> collection = db.getCollection("courses");
-				System.out.println(collection.toString());
-				FindIterable<Document> result = collection.find();
-				System.out.println(result.toString());
-				colResult = new ArrayList<String>();
-				for (Document doc : result) {
-					colResult.add(doc.toJson());
-					System.out.println(doc);
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return colResult;
 	}
 
-	public static  ArrayList<String> getAll(){
+	public static  List<Document> getAll() throws JsonProcessingException {
 		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-//		String uri = "mongodb+srv://ladyangel:12345@proyectovr.jlpld.mongodb.net/vrclassroom?retryWrites=true&w=majority";
 
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.DB_URI)) {
-
+		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
 			System.out.println("Connexion creada correctamente");
-			MongoDatabase db = mongoClient.getDatabase("vrclassroom");
-			System.out.println(db.toString());
+			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("courses");
-			System.out.println(collection.toString());
-			FindIterable<Document> result = collection.find();
-			System.out.println(result.toString());
-			for (Document doc : result) {
-				colResult.add(doc.toJson());
-				System.out.println(doc);
-			}
-			;
-			return colResult;
+			result = collection.find();
+			documents = new ArrayList<Document>();
+			result.forEach(documents::add);
 		}
+		return documents;
 	}
 
-	private static void printDatabases(MongoClient mongoClient) {
-		List<Document> dbDocuments = mongoClient.listDatabases().into(new ArrayList());
-		dbDocuments.forEach(document -> System.out.println(document.toJson()));
-	}
+//	private static void printDatabases(MongoClient mongoClient) {
+//		List<Document> dbDocuments = mongoClient.listDatabases().into(new ArrayList());
+//		dbDocuments.forEach(document -> System.out.println(document.toJson()));
+//	}
 }

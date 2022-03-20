@@ -1,17 +1,10 @@
 package utilities;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,13 +31,12 @@ public class ReadJSON {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		jsonParser = new JSONParser();
-		try (FileReader reader = new FileReader(FILE_COURSE))
+		try (Reader reader = new FileReader(FILE_COURSE))
 		{
 			//Read JSON file
 			Object obj = jsonParser.parse(reader);
 			JSONArray courseList = (JSONArray) obj;
 			List<Course> courses = new ArrayList<Course>();
-//			System.out.println(courseList.toString());
 			courseList.forEach( course -> courses.add(parseCourseObject((JSONObject) course )));
 
 		} catch (FileNotFoundException e) {
@@ -61,7 +53,8 @@ public class ReadJSON {
 	{
 		JSONObject courseObject = (JSONObject) courseJSON.get("_id");
 		System.out.println();
-		Course course = Course.builder().id(courseObject.get("$oid").toString())
+		Course course = Course.builder()
+				.id(courseObject.get("$oid").toString())
 				.title(courseJSON.get("title").toString())
 				.description(courseJSON.get("description").toString())
 				.build();
@@ -69,8 +62,8 @@ public class ReadJSON {
 		courseObject = (JSONObject) courseJSON.get("subscribers");
 		String[] arrayTeacher = courseObject.get("teachers").toString().substring(1, courseObject.get("teachers").toString().length() - 1).split(",");
 		String[] arrayStudent = courseObject.get("students").toString().substring(1, courseObject.get("students").toString().length() - 1).split(",");
-		Set<Teacher> teachers = new HashSet<Teacher>();
-		Set<Student> students = new HashSet<Student>();
+		List<Teacher> teachers = new ArrayList<Teacher>();
+		List<Student> students = new ArrayList<Student>();
 		for(String x: arrayTeacher) {
 			teachers.add(Teacher.builder().id(Long.valueOf(x)).build());
 		}
@@ -80,19 +73,19 @@ public class ReadJSON {
 		Subscriber subscriber = Subscriber.builder().teachers(teachers).students(students).build();
 		course.setSubscriber(subscriber);
 
-		Set<Element> elements = new HashSet<Element>();
+		List<Element> elements = new ArrayList<Element>();
 		JSONArray elementList = (JSONArray) courseJSON.get("elements");
 		elementList.forEach(elementItem -> elements.add(parseElement((JSONObject) elementItem )));
 		course.setElements(elements);
 
-		Set<Task> tasks = new HashSet<Task>();
+		List<Task> tasks = new ArrayList<Task>();
 		JSONArray taskList = (JSONArray) courseJSON.get("tasks");
 
 		taskList.forEach(task -> tasks.add(parseTask((JSONObject) task)));
 
 		course.setTasks(tasks);
 
-		Set<VrTask> vrTasks = new HashSet<VrTask>();
+		List<VrTask> vrTasks = new ArrayList<VrTask>();
 		JSONArray vrTaskList = (JSONArray) courseJSON.get("vr_tasks");
 
 		vrTaskList.forEach(vrTaskObj -> vrTasks.add(parseVRTask((JSONObject) vrTaskObj)));
@@ -112,7 +105,7 @@ public class ReadJSON {
 				.VRexID(Integer.valueOf(vrTaskObj.get("VRexID").toString()))
 				.versionID(Integer.valueOf(vrTaskObj.get("versionID").toString()))
 				.pollID(Integer.valueOf(vrTaskObj.get("pollID").toString())).build();
-		Set<Completion> completions = new HashSet<Completion>();
+		List<Completion> completions = new ArrayList<Completion>();
 		JSONArray completionList = (JSONArray) vrTaskObj.get("completions");
 
 		completionList.forEach(completionObj -> {
@@ -149,7 +142,7 @@ public class ReadJSON {
 				.title(taskObject.get("title").toString())
 				.description(taskObject.get("description").toString())
 				.order(Integer.valueOf(taskObject.get("order").toString())).build();
-		Set<Upload> uploads = new HashSet<Upload>();
+		List<Upload> uploads = new ArrayList<Upload>();
 		JSONArray uploadList = (JSONArray) taskObject.get("uploads");
 
 		uploadList.forEach(uploadObj -> {

@@ -12,15 +12,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Upload {
-	
+
+	@BsonProperty("studentID")
 	private Long studentID;
-	
+
+	@BsonProperty("text")
 	private String text;
-	
+
+	@BsonProperty("file")
 	private String file;
-	
+
+	@BsonProperty("grade")
 	private int grade;
-	
+
+	@BsonProperty("feedback")
 	private String feedback;
 	
 }

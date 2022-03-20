@@ -14,14 +14,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Completion {
-	
+
+	@BsonProperty("studentID")
 	private Long studentID;
-	
+
+	@BsonProperty("position_data")
 	private Map<String, String> position_data;
-	
+
+	@BsonProperty("autograde")
 	private Map<String, String> autograde;
-	
+
+	@BsonProperty("grade")
 	private int grade;
-	
+
+	@BsonProperty("feedback")
 	private String feedback;
 }
