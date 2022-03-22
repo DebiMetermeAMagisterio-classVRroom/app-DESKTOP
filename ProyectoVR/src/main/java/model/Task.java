@@ -17,7 +17,7 @@ public class Task {
 
 	@BsonId
 	@BsonProperty("ID")
-	private Long ID;
+	private int ID;
 
 	@BsonProperty("type")
 	private String type;
@@ -34,7 +34,7 @@ public class Task {
 	private List<Upload> uploads;
 
 	@BsonCreator
-	public Task(@BsonProperty("ID") Long ID,@BsonProperty("type") String type,@BsonProperty("title") String title,@BsonProperty("description") String description,@BsonProperty("order") int order,@BsonProperty("uploads") List<Upload> uploads) {
+	public Task(@BsonProperty("ID") int ID,@BsonProperty("type") String type,@BsonProperty("title") String title,@BsonProperty("description") String description,@BsonProperty("order") int order,@BsonProperty("uploads") List<Upload> uploads) {
 		this.ID = ID;
 		this.type = type;
 		this.title = title;

@@ -17,7 +17,7 @@ import java.util.List;
 public class Element {
 	@BsonId
 	@BsonProperty("ID")
-	private Long ID;
+	private int ID;
 
 	@BsonProperty("type")
 	private String type;
@@ -38,7 +38,7 @@ public class Element {
 	private String file;
 
 	@BsonCreator
-	public Element(@BsonProperty("ID") Long ID, @BsonProperty("type") String type, @BsonProperty("title") String title,@BsonProperty("description") String description,@BsonProperty("order") int order,@BsonProperty("contents") String contents,@BsonProperty("file") String file) {
+	public Element(@BsonProperty("ID") int ID, @BsonProperty("type") String type, @BsonProperty("title") String title,@BsonProperty("description") String description,@BsonProperty("order") int order,@BsonProperty("contents") String contents,@BsonProperty("file") String file) {
 		this.ID = ID;
 		this.type = type;
 		this.title = title;

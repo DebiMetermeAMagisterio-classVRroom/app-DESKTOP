@@ -16,7 +16,7 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 public class VrTask {
 	@BsonId
 	@BsonProperty("ID")
-	private Long ID;
+	private int ID;
 
 	@BsonProperty("title")
 	private String title;
@@ -36,7 +36,7 @@ public class VrTask {
 	private List<Completion> completions;
 
 	@BsonCreator
-	public VrTask(@BsonProperty("ID") Long ID,@BsonProperty("title") String title,@BsonProperty("description") String description,@BsonProperty("VRexID") int VRexID,@BsonProperty("versionID") int versionID,@BsonProperty("pollID") int pollID,@BsonProperty("completions") List<Completion> completions) {
+	public VrTask(@BsonProperty("ID") int ID,@BsonProperty("title") String title,@BsonProperty("description") String description,@BsonProperty("VRexID") int VRexID,@BsonProperty("versionID") int versionID,@BsonProperty("pollID") int pollID,@BsonProperty("completions") List<Completion> completions) {
 		this.ID = ID;
 		this.title = title;
 		this.description = description;

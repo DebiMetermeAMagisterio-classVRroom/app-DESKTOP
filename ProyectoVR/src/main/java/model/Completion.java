@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Completion {
 
 	@BsonProperty("studentID")
-	private Long studentID;
+	private int studentID;
 
 	@BsonProperty("position_data")
 	private Map<String, String> position_data;

@@ -1,6 +1,7 @@
 package utilities;
 
 
+import java.io.IOException;
 import java.util.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,19 +18,23 @@ public class ReadJSONAtlas {
     private static List<Document> documents;
     private static Course course;
     private static List<Course> courses;
+    private static User user;
+    private static List<User> users;
 
-    public ReadJSONAtlas() throws JsonProcessingException {
-        documents = ConfigMongoConnection.getAll();
-        getAll(documents);
+    public ReadJSONAtlas() throws IOException {
+        documents = ConfigMongoConnection.getAllCourses();
+        getAllCourses(documents);
     }
 
-//    public static void main(String[] args) throws JsonProcessingException {
-//        documents = ConfigMongoConnection.getAll();
-//        getAll(documents);
-//        ;
-//    }
+    public static void main(String[] args) throws IOException {
+        documents = ConfigMongoConnection.getAllUsers();
+        getAllUsers(documents);
+//        documents = ConfigMongoConnection.getAllCourses();
+//        getAllCourses(documents);
+    }
 
-    private static List<Course> getAll(List<Document> results) throws JsonProcessingException {
+    public static List<Course> getAllCourses(List<Document> results) throws IOException {
+        courses = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<Element> elements = new ArrayList<>();
@@ -68,6 +73,7 @@ public class ReadJSONAtlas {
             course.setVrTasks(vrTasks);
             courses.add(course);
         }
+//        courses.forEach(x ->System.out.println(x));
         return courses;
     }
 
@@ -75,13 +81,13 @@ public class ReadJSONAtlas {
         String[] teacherList = jsonNode.get("teachers").toString().substring(1, jsonNode.get("teachers").toString().length() - 1).split(",");
         List<Teacher> teachers = new ArrayList<Teacher>();
         for (String item : teacherList) {
-            Teacher teacher = Teacher.builder().id(Long.valueOf(item)).build();
+            Teacher teacher = Teacher.builder().id(Integer.valueOf(item)).build();
             teachers.add(teacher);
         }
         String[] studentList = jsonNode.get("students").toString().substring(1, jsonNode.get("students").toString().length() - 1).split(",");
         List<Student> students = new ArrayList<Student>();
         for (String item : studentList) {
-            Student student = Student.builder().id(Long.valueOf(item)).build();
+            Student student = Student.builder().id(Integer.valueOf(item)).build();
             students.add(student);
         }
         Subscriber subscriber = Subscriber.builder().teachers(teachers).students(students).build();
@@ -90,18 +96,18 @@ public class ReadJSONAtlas {
 
     private static Element parseElement(JsonNode elementList, int i) {
         Element element = course.getElements().get(i);
-        element.setID(Long.valueOf(elementList.get("ID").toString()));
+        element.setID(Integer.valueOf(elementList.get("ID").toString()));
         return element;
     }
 
     private static Task parseTask(JsonNode ele, int i) {
         Task task = course.getTasks().get(i);
-        task.setID(Long.valueOf(ele.get("ID").toString()));
+        task.setID(Integer.valueOf(ele.get("ID").toString()));
         return task;
     }
 
     private static VrTask parseVrTask(JsonNode ele, int i) {
-        VrTask vrTask = VrTask.builder().ID(Long.valueOf(ele.get("ID").toString()))
+        VrTask vrTask = VrTask.builder().ID(Integer.valueOf(ele.get("ID").toString()))
                 .title(ele.get("title").toString())
                 .description(ele.get("descripcion").toString())
                 .VRexID(Integer.valueOf(ele.get("VRexID").toString()))
@@ -122,7 +128,7 @@ public class ReadJSONAtlas {
 
     private static Completion parseCompletions(JsonNode item, int j) {
         Completion completion = Completion.builder()
-                .studentID(Long.valueOf(item.get("studentID").toString()))
+                .studentID(Integer.valueOf(item.get("studentID").toString()))
                 .grade(Integer.valueOf(item.get("grade").toString()))
                 .feedback(item.get("feedback").toString()).build();
 
@@ -140,6 +146,22 @@ public class ReadJSONAtlas {
         return completion;
     }
 
+    public static List<User> getAllUsers(List<Document> results) throws IOException {
+        users = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        for (Document doc : results) {
+            JsonNode jsonNode = objectMapper.readTree(doc.toJson());
+            user = User.builder().build();
+            user = objectMapper.readValue(doc.toJson(), User.class);
+            user.setFirstName(jsonNode.get("first_name").toString());
+            user.setLastName(jsonNode.get("last_name").toString());
+            user.setSessionToken(jsonNode.get("session_token").toString());
+            users.add(user);
+        }
+//        users.forEach(x ->System.out.println(x));
+        return users;
+    }
     //    private static void createDocuments(MongoDatabase db) {
 //        Document doc = new Document("", "");
 //        db.getCollection("courses").insertOne(doc);

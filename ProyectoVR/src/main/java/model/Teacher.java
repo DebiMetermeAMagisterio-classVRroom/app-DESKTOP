@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Teacher {
-	private Long id;
+	private int id;
 }

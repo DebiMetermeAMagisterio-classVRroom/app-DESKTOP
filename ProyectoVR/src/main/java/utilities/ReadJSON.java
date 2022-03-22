@@ -65,10 +65,10 @@ public class ReadJSON {
 		List<Teacher> teachers = new ArrayList<Teacher>();
 		List<Student> students = new ArrayList<Student>();
 		for(String x: arrayTeacher) {
-			teachers.add(Teacher.builder().id(Long.valueOf(x)).build());
+			teachers.add(Teacher.builder().id(Integer.valueOf(x)).build());
 		}
 		for(String x: arrayStudent) {
-			students.add(Student.builder().id(Long.valueOf(x)).build());
+			students.add(Student.builder().id(Integer.valueOf(x)).build());
 		}
 		Subscriber subscriber = Subscriber.builder().teachers(teachers).students(students).build();
 		course.setSubscriber(subscriber);
@@ -99,7 +99,7 @@ public class ReadJSON {
 	@SuppressWarnings("unchecked")
 	private static VrTask parseVRTask(JSONObject vrTaskObj) {
 		VrTask vrTask = VrTask.builder()
-				.ID(Long.valueOf(vrTaskObj.get("ID").toString()))
+				.ID(Integer.valueOf(vrTaskObj.get("ID").toString()))
 				.title(vrTaskObj.get("title").toString())
 				.description(vrTaskObj.get("descripcion").toString())
 				.VRexID(Integer.valueOf(vrTaskObj.get("VRexID").toString()))
@@ -112,7 +112,7 @@ public class ReadJSON {
 			JSONObject completionJSON = (JSONObject) completionObj;
 
 			Completion completion = Completion.builder()
-					.studentID(Long.valueOf(completionJSON.get("studentID").toString()))
+					.studentID(Integer.valueOf(completionJSON.get("studentID").toString()))
 					.grade(Integer.valueOf(completionJSON.get("grade").toString()))
 					.feedback(completionJSON.get("feedback").toString()).build();
 
@@ -137,7 +137,7 @@ public class ReadJSON {
 	@SuppressWarnings("unchecked")
 	private static Task parseTask(JSONObject taskObject) {
 		Task task = Task.builder()
-				.ID(Long.valueOf(taskObject.get("ID").toString()))
+				.ID(Integer.valueOf(taskObject.get("ID").toString()))
 				.type(taskObject.get("type").toString())
 				.title(taskObject.get("title").toString())
 				.description(taskObject.get("description").toString())
@@ -149,7 +149,7 @@ public class ReadJSON {
 			JSONObject uploadJSON = (JSONObject) uploadObj;
 
 			Upload upload = Upload.builder()
-					.studentID(Long.valueOf(uploadJSON.get("studentID").toString()))
+					.studentID(Integer.valueOf(uploadJSON.get("studentID").toString()))
 					.text(uploadJSON.get("text").toString())
 					.grade(Integer.valueOf(uploadJSON.get("grade").toString()))
 					.feedback(uploadJSON.get("feedback").toString()).build();
@@ -167,7 +167,7 @@ public class ReadJSON {
 
 	private static Element parseElement(JSONObject elementList) {
 		Element element = Element.builder()
-				.ID(Long.valueOf(elementList.get("ID").toString()))
+				.ID(Integer.valueOf(elementList.get("ID").toString()))
 				.type(elementList.get("type").toString())
 				.title(elementList.get("title").toString())
 				.description(elementList.get("description").toString())

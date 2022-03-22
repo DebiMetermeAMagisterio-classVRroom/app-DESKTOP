@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Upload {
 
 	@BsonProperty("studentID")
-	private Long studentID;
+	private int studentID;
 
 	@BsonProperty("text")
 	private String text;
