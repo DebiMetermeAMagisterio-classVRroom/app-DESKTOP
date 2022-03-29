@@ -2,6 +2,7 @@ package mainVR;
 
 import java.io.IOException;
 
+import Configuration.ConfigMongoConnection;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -116,6 +117,7 @@ public class MainAPP extends Application {
 //	}
 
 	public static void main(String[] args) throws IOException {
+		
 		courses = readJSONAtlas.getAllCourses();
 		users = readJSONAtlas.getAllUsers();
 		launch(args);

@@ -41,6 +41,18 @@ public class ConfigMongoConnection {
 	private static final File FILE_COURSE= new File(dirPath.concat("CourseTemp.json"));
 	private static JSONParser jsonParser;
 
+
+	public ConfigMongoConnection() {
+		super();
+		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+
+		MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"));
+		System.out.println("Connexion creada correctamente");
+		db = mongoClient.getDatabase("vrclassroom");
+//		MongoCollection<Document> collection = db.getCollection("courses");
+	}
+
+
 	//	public static void main(String[] args) throws IOException {
 	//		ConfigMongoConnection configMongoConnection = new ConfigMongoConnection();
 	//		configMongoConnection.getAllCourses();
@@ -49,46 +61,48 @@ public class ConfigMongoConnection {
 	//	} 
 
 	public List<Document> getAllUsers() {
-		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
-			System.out.println("Connexion creada correctamente");
-			db = mongoClient.getDatabase("vrclassroom");
+//		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+//
+//		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
+//			System.out.println("Connexion creada correctamente");
+//			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("users");
 			result = collection.find();
 			documents = new ArrayList<>();
 			result.forEach(documents::add);
 			//			documents.forEach(x -> System.out.println(x));
-		}
+//		}
 		return documents;
 	}
 
-	public List<Document> getAllCourses() {
-		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
 
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
-			System.out.println("Connexion creada correctamente");
-			db = mongoClient.getDatabase("vrclassroom");
+
+	public List<Document> getAllCourses() {
+//		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+//
+//		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
+//			System.out.println("Connexion creada correctamente");
+//			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("courses");
 			result = collection.find();
 			documents = new ArrayList<>();
 			result.forEach(documents::add);
 			//			documents.forEach(x -> System.out.println(x));
-		}
+//		}
 		return documents; 
 	}
 
 	public Document getFirst() {
-		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
-			System.out.println("Connexion creada correctamente");
-			db = mongoClient.getDatabase("vrclassroom");
+//		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+//
+//		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
+//			System.out.println("Connexion creada correctamente");
+//			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("courses");
 			document = new Document();
 			document = collection.find().first();
 			//			System.out.println(document);
-		}
+//		}
 		return document;
 	}
 
@@ -104,9 +118,9 @@ public class ConfigMongoConnection {
 		newCourse.put("title", title);
 		newCourse.put("description", description);
 
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
-			System.out.println("Connexion creada correctamente");
-			db = mongoClient.getDatabase("vrclassroom");
+//		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
+//			System.out.println("Connexion creada correctamente");
+//			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("courses");
 			document = getFirst();
 			try {
@@ -115,16 +129,16 @@ public class ConfigMongoConnection {
 			} catch (MongoException me) {
 				System.err.println("Unable to insert due to an error: " + me);
 			}
-		}
+//		}
 
 	}	
 
 	public void deleteDocument (String title) {
-		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
-			System.out.println("Connexion creada correctamente");
-			db = mongoClient.getDatabase("vrclassroom");
+//		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+//
+//		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
+//			System.out.println("Connexion creada correctamente");
+//			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("courses");
 			Bson query = eq("title", title);
 			try {
@@ -133,15 +147,15 @@ public class ConfigMongoConnection {
 			} catch (MongoException me) {
 				System.err.println("Unable to delete due to an error: " + me);
 			}
-		}
+//		}
 	}
 
 	public void updateTeacher(String course, int teacher) {
-		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
-			System.out.println("Connexion creada correctamente");
-			db = mongoClient.getDatabase("vrclassroom");
+//		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+//
+//		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
+//			System.out.println("Connexion creada correctamente");
+//			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("courses");
 
 			Document query = new Document().append("title", course);
@@ -155,15 +169,15 @@ public class ConfigMongoConnection {
 			} catch (MongoException me) {
 				System.err.println("Unable to update due to an error: " + me);
 			}
-		}
+//		}
 	}
 
 	public void updateStudent(String course, int student) {
-		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
-			System.out.println("Connexion creada correctamente");
-			db = mongoClient.getDatabase("vrclassroom");
+//		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+//
+//		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
+//			System.out.println("Connexion creada correctamente");
+//			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("courses");
 
 			Document query = new Document().append("title", course);
@@ -177,15 +191,15 @@ public class ConfigMongoConnection {
 			} catch (MongoException me) {
 				System.err.println("Unable to update due to an error: " + me);
 			}
-		}
+//		}
 	}
 
 	public void deleteTeacher(String course, int teacher) {
-		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
-			System.out.println("Connexion creada correctamente");
-			db = mongoClient.getDatabase("vrclassroom");
+//		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+//
+//		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
+//			System.out.println("Connexion creada correctamente");
+//			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("courses");
 
 			Document query = new Document().append("title", course);
@@ -198,15 +212,15 @@ public class ConfigMongoConnection {
 			} catch (MongoException me) {
 				System.err.println("Unable to update due to an error: " + me);
 			}
-		}
+//		}
 	}
 
 	public void deleteStudent(String course, int student) {
-		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
-			System.out.println("Connexion creada correctamente");
-			db = mongoClient.getDatabase("vrclassroom");
+//		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+//
+//		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
+//			System.out.println("Connexion creada correctamente");
+//			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("courses");
 
 			Document query = new Document().append("title", course);
@@ -219,14 +233,14 @@ public class ConfigMongoConnection {
 			} catch (MongoException me) {
 				System.err.println("Unable to update due to an error: " + me);
 			}
-		}
+//		}
 	}
 
 	public Document findOne(String title) {
-		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
-
-		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
-			db = mongoClient.getDatabase("vrclassroom");
+//		Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+//
+//		try (MongoClient mongoClient = MongoClients.create(DOTENV.get("DB_URI"))) {
+//			db = mongoClient.getDatabase("vrclassroom");
 			MongoCollection<Document> collection = db.getCollection("courses");
 			document = collection.find(eq("title", title)).first();
 			if (document == null) {
@@ -234,7 +248,7 @@ public class ConfigMongoConnection {
 			} else {
 				System.out.println(document.toJson());
 			}
-		}
+//		}
 		return document;
 	}
 

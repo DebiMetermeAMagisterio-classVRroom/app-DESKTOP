@@ -202,7 +202,6 @@ public class CourseOverviewController {
 		String[] errorMessage = exceptionConstants.CONFIRMATION_DELETE_DATA.split("-");
 
 		int selectedIndex = listViewCourses.getSelectionModel().getSelectedIndex();
-
 		if(selectedIndex >= 0) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle(errorMessage[0]);
@@ -227,6 +226,7 @@ public class CourseOverviewController {
 			alert.setContentText(errorMessage[2]);
 			alert.showAndWait();
 		}
+		setListButton();
 	}
 
 	@FXML

@@ -37,12 +37,13 @@ public class ReadJSONAtlas {
 	private List<Document> results = new ArrayList<Document>();
 	private Document document = new Document();
 
-	    public static void main(String[] args) throws IOException {
-	    	ReadJSONAtlas readJSONAtlas = new ReadJSONAtlas();
+//	    public static void main(String[] args) throws IOException {
+//	    
+//	    	ReadJSONAtlas readJSONAtlas = new ReadJSONAtlas();
 //	    	readJSONAtlas.getAllCourses();
 //	    	readJSONAtlas.getAllUsers();
-	    	readJSONAtlas.getCourse("Course4");
-		}
+//	    	readJSONAtlas.getCourse("Course4");
+//		}
 
 	public Course getCourse(String title) throws IOException {
 		document = configMongoConnection.findOne(title);
