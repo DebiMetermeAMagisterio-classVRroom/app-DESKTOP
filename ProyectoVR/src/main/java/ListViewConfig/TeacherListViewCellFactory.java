@@ -3,8 +3,6 @@ package ListViewConfig;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
-import model.Course;
-import model.Teacher;
 import model.User;
 
 public class TeacherListViewCellFactory implements Callback<ListView<User>,ListCell<User> > {

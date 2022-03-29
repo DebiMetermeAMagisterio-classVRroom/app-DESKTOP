@@ -76,8 +76,6 @@ public class CourseOverviewController {
 	private ObservableList<Course> courses = FXCollections.observableArrayList();
 
 	private ObservableList<User> users = FXCollections.observableArrayList();
-
-	private ObservableList<Button> buttons =  FXCollections.observableArrayList();
 	
 	private ExceptionConstants exceptionConstants = new ExceptionConstants();
 
@@ -113,6 +111,7 @@ public class CourseOverviewController {
 	}
 
 	public void setListButton(){
+		ObservableList<Button> buttons =  FXCollections.observableArrayList();
 		for(int i=0; i<listViewCourses.getItems().size(); i++) {
 			Button button = new Button();
 			ImageView imageViewDelete = new ImageView();
@@ -185,6 +184,20 @@ public class CourseOverviewController {
 		}
 	}
 
+	@FXML
+	private void handleNewCourse() throws IOException, ParseException {
+		Course tempCourse = new Course();
+		boolean okClicked = mainAPP.showCourseEditDialog(tempCourse);
+
+		if (okClicked) {
+			configMongoConnection.insertCourse(tempCourse.getTitle(), tempCourse.getDescription());
+			tempCourse = readJSONAtlas.getCourse(tempCourse.getTitle());
+			mainAPP.getCourses().add(tempCourse);
+			listViewImage.getChildren().clear();
+		} 
+		setListButton();
+	}
+	
 	private void handleDeleteCourseOverview(String id) throws IOException {
 		String[] errorMessage = exceptionConstants.CONFIRMATION_DELETE_DATA.split("-");
 
@@ -205,7 +218,6 @@ public class CourseOverviewController {
 					}
 				}
 				listViewCourses.getItems().remove(selectedIndex);
-				setListButton();
 			}
 		}else {
 			errorMessage = exceptionConstants.NO_VALID_DATA.split("-");
@@ -350,21 +362,4 @@ public class CourseOverviewController {
 		}
 	}
 	
-	
-
-	@FXML
-	private void handleNewCourse() throws IOException, ParseException {
-		Course tempCourse = new Course();
-		boolean okClicked = mainAPP.showCourseEditDialog(tempCourse);
-
-		if (okClicked) {
-			configMongoConnection.insertCourse(tempCourse.getTitle(), tempCourse.getDescription());
-			tempCourse = readJSONAtlas.getCourse(tempCourse.getTitle());
-			mainAPP.getCourses().add(tempCourse);
-			listViewImage.getChildren().clear();
-			setListButton();
-		} 
-
-	}
-
 }
