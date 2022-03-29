@@ -1,0 +1,49 @@
+[{
+  "_id": {
+    "$oid": "6230a946bc90b86fa1e6b9b6"
+  },
+  "id": 1,
+  "first_name": "Pol",
+  "last_name": "Tell",
+  "password": "ptj",
+  "email": "ptelljove.cf@iesesteveterradas.cat",
+  "role": "",
+  "session_token": "e11059981e54177f99307135e8c6ac4047a9942cb82be3e84daed38a36c323a4",
+  "session_token_expiration": ""
+},{
+  "_id": {
+    "$oid": "6230a99fbc90b86fa1e6b9b7"
+  },
+  "id": 2,
+  "first_name": "Nacho",
+  "last_name": "Hidalgo",
+  "password": "nht",
+  "email": "ihidalgotoca.cf@iesesteveterradas.cat",
+  "role": "",
+  "session_token": "ef6bf4614c9ae962dd0c0b70be27299cbe766f63cc2f5b26b3db38c74fcbbb79",
+  "session_token_expiration": ""
+},{
+  "_id": {
+    "$oid": "6230a9bebc90b86fa1e6b9b8"
+  },
+  "id": 101,
+  "first_name": "Leandro",
+  "last_name": "Zabala",
+  "password": "leza",
+  "email": "lzabala.cf@iesesteveterradas.cat",
+  "role": "",
+  "session_token": "",
+  "session_token_expiration": ""
+},{
+  "_id": {
+    "$oid": "6230a9d7bc90b86fa1e6b9b9"
+  },
+  "id": 102,
+  "first_name": "Enric",
+  "last_name": "Mieza",
+  "password": "enmi",
+  "email": "emieza.cf@iesesteveterradas.cat",
+  "role": "",
+  "session_token": "",
+  "session_token_expiration": ""
+}]

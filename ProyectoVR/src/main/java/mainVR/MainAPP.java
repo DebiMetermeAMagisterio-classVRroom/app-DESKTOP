@@ -1,12 +1,8 @@
 package mainVR;
 
 import java.io.IOException;
-import java.util.List;
 
-import Configuration.ConfigMongoConnection;
 import javafx.application.Application;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -14,20 +10,20 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Course;
-import model.CourseOverview;
 import model.User;
 import utilities.ReadJSONAtlas;
 
+
 public class MainAPP extends Application {
 
-	private static ObservableList<CourseOverview> courseObservableList = FXCollections.observableArrayList();
-	private static ObservableList<CourseOverview> userObservableList = FXCollections.observableArrayList();
+	private static ObservableList<Course> courses = FXCollections.observableArrayList();
+	private static ObservableList<User> users = FXCollections.observableArrayList();
 	private Stage primaryStage;
 	private BorderPane rootLayout;
-	private static List<Course> courseList;
-	private static List<User> userList;
+	private static ReadJSONAtlas readJSONAtlas = new ReadJSONAtlas();
 
 	//	private static final String PATH = "./src/main/java/view/";
 
@@ -69,40 +65,60 @@ public class MainAPP extends Application {
 			controller.setMainAPP(this);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (Exception f) {
-			System.out.println("Aqui una excepcion");
-			f.printStackTrace();
-		}
+		} 
+	}
+	
+	public ObservableList<Course> getCourses() throws IOException {
+		return courses;
+	}
+
+	public ObservableList<User> getUsers() throws IOException {
+		return users;
+	}
+	
+	public boolean showCourseEditDialog(Course course) {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainAPP.class.getResource("CourseEditDialog.fxml"));
+			AnchorPane page = (AnchorPane) loader.load();
+
+	        // Create the dialog Stage.
+	        Stage dialogStage = new Stage();
+	        dialogStage.setTitle("Edit Course");
+	        dialogStage.initModality(Modality.WINDOW_MODAL);
+	        dialogStage.initOwner(primaryStage);
+	        dialogStage.getIcons().add(new Image("file:./src/main/resources/Image/gafas-vr.png"));
+	        Scene scene = new Scene(page);
+	        dialogStage.setScene(scene);
+
+	        // Set the person into the controller.
+	        CourseEditDialogController controller = loader.getController();
+	        controller.setDialogStage(dialogStage);
+	        controller.setCourse(course);
+
+	        // Show the dialog and wait until the user closes it
+	        dialogStage.showAndWait();
+
+	        return controller.isOkClicked();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 
 	public Stage getPrimaryStage() {
 		return primaryStage;
 	}
+	
+//	public MainAPP() throws IOException {
+//		courses = readJSONAtlas.getAllCourses();
+//		users = readJSONAtlas.getAllUsers();
+//	}
 
 	public static void main(String[] args) throws IOException {
-		courseList = ReadJSONAtlas.getAllCourses(ConfigMongoConnection.getAllCourses());
-		ObservableList<IntegerProperty> teachers = FXCollections.observableArrayList();
-		ObservableList<IntegerProperty> students = FXCollections.observableArrayList();
-		courseList.forEach(course -> {
-			course.getSubscriber().getTeachers().forEach(x -> {
-				teachers.add(new SimpleIntegerProperty(x.getId()));
-			});
-			course.getSubscriber().getStudents().forEach(x -> students.add(new SimpleIntegerProperty(x.getId())));
-			courseObservableList.add(new CourseOverview(course.getTitle(), course.getDescription(), teachers, students));
-		});
-		userList = ReadJSONAtlas.getAllUsers(ConfigMongoConnection.getAllUsers());
-		userList.forEach(user -> {
-			userObservableList.add(new CourseOverview(user.getFirstName().substring(1, user.getFirstName().length()-1) + " " +user.getLastName().substring(1, user.getLastName().length()-1)));
-		});
+		courses = readJSONAtlas.getAllCourses();
+		users = readJSONAtlas.getAllUsers();
 		launch(args);
-	}
-
-	public ObservableList<CourseOverview> getCourseObservableList() {
-		return courseObservableList;
-	}
-
-	public ObservableList<CourseOverview> getUserObservableList() {
-		return userObservableList;
 	}
 
 }

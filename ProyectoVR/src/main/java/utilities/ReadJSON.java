@@ -24,7 +24,7 @@ import model.VrTask;
 public class ReadJSON {
 
 	private static String dirPath = "./src/main/resources/Docs/";
-	private static final File FILE_COURSE= new File(dirPath.concat("classVRroom_courses.json"));
+	private static final File FILE_COURSE= new File(dirPath.concat("CourseTemp.json"));
 	private static JSONParser jsonParser;
 
 
