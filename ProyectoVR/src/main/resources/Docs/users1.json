@@ -1,0 +1,61 @@
+[{
+  "_id": {
+    "$oid": ""
+  },
+  "id": 3,
+  "first_name": "Angela",
+  "last_name": "Hincapie",
+  "password": "amh",
+  "email": "ahincapiemorales.cf@iesesteveterradas.cat",
+  "role": "",
+  "session_token": "",
+  "session_token_expiration": ""
+},{
+  "_id": {
+    "$oid": ""
+  },
+  "id": 11,
+  "first_name": "Alex",
+  "last_name": "Arios",
+  "password": "aaa",
+  "email": "alexarios.cf@iesesteveterradas.cat",
+  "role": "",
+  "session_token": "",
+  "session_token_expiration": ""
+},{
+  "_id": {
+    "$oid": ""
+  },
+  "id": 12,
+  "first_name": "Roberto",
+  "last_name": "Perez",
+  "password": "rpp",
+  "email": "robertoperez.cf@iesesteveterradas.cat",
+  "role": "",
+  "session_token": "",
+  "session_token_expiration": ""
+},{
+  "_id": {
+    "$oid": ""
+  },
+  "id": 13,
+  "first_name": "Maria",
+  "last_name": "Morales",
+  "password": "mmm",
+  "email": "marmorales.cf@iesesteveterradas.cat",
+  "role": "",
+  "session_token": "",
+  "session_token_expiration": ""
+},{
+  "_id": {
+    "$oid": ""
+  },
+  "id": 14,
+  "first_name": "Samuel",
+  "last_name": "Hincapie",
+  "password": "shm",
+  "email": "samuelmorales.cf@iesesteveterradas.cat",
+  "role": "",
+  "session_token": "",
+  "session_token_expiration": ""
+}]
