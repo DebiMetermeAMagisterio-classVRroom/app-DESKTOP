@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainVR.CourseEditDialogController">
+   <children>
+      <Label layoutX="104.0" layoutY="14.0" text="COURSE MANAGING" AnchorPane.leftAnchor="104.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font name="Calibri Bold" size="34.0" />
+         </font>
+      </Label>
+      <GridPane layoutX="33.0" layoutY="56.0" prefHeight="76.0" prefWidth="434.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="248.20001220703125" minWidth="10.0" prefWidth="184.20001220703125" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="391.4000015258789" minWidth="10.0" prefWidth="321.79998779296875" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="TITOL:">
+               <font>
+                  <Font name="Calibri" size="16.0" />
+               </font>
+            </Label>
+            <Label text="DESCRIPTION:" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Calibri" size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="titleField" GridPane.columnIndex="1">
+               <font>
+                  <Font name="Calibri Light" size="16.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="descriptionField" prefHeight="26.0" prefWidth="303.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Calibri Light" size="16.0" />
+               </font>
+            </TextField>
+         </children>
+      </GridPane>
+      <HBox layoutX="116.0" layoutY="146.0" prefHeight="40.0" prefWidth="267.0">
+         <children>
+            <Button minHeight="30.0" mnemonicParsing="false" onAction="#handleOk" prefWidth="70.0" text="OK">
+               <font>
+                  <Font name="Calibri" size="15.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="60.0" right="5.0" top="5.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </Button>
+            <Button minHeight="30.0" mnemonicParsing="false" onAction="#handleCancel" prefWidth="70.0" text="CANCEL">
+               <font>
+                  <Font name="Calibri" size="15.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import Configuration.ConfigMongoConnection;
+import config.ConfigMongoConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Completion;
@@ -32,18 +32,17 @@ public class ReadJSONAtlas {
 	private Course course;
 	private ObservableList<Course> courses;
 	private User user;
-	private List<User> users;
+	private ObservableList<User> users;
 	private ConfigMongoConnection configMongoConnection = new ConfigMongoConnection();
 	private List<Document> results = new ArrayList<Document>();
 	private Document document = new Document();
 
-//	    public static void main(String[] args) throws IOException {
-//	    
-//	    	ReadJSONAtlas readJSONAtlas = new ReadJSONAtlas();
+	    public static void main(String[] args) throws IOException {
+	    	ReadJSONAtlas readJSONAtlas = new ReadJSONAtlas();
 //	    	readJSONAtlas.getAllCourses();
 //	    	readJSONAtlas.getAllUsers();
-//	    	readJSONAtlas.getCourse("Course4");
-//		}
+	    	readJSONAtlas.getCourse("Course4");
+		}
 
 	public Course getCourse(String title) throws IOException {
 		document = configMongoConnection.findOne(title);
@@ -200,9 +199,9 @@ private Completion parseCompletions(JsonNode item, int j) {
 	return completion;
 }
 
-public List<User> getAllUsers() throws IOException {
+public ObservableList<User> getAllUsers() throws IOException {
 	results = configMongoConnection.getAllUsers();
-	users = new ArrayList<User>();
+	users = FXCollections.observableArrayList();
 	ObjectMapper objectMapper = new ObjectMapper();
 	objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	for (Document doc : results) {

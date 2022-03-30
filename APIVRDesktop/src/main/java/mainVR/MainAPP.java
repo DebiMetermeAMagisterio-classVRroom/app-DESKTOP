@@ -1,8 +1,6 @@
 package mainVR;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -22,7 +20,7 @@ import utilities.ReadJSONAtlas;
 public class MainAPP extends Application {
 
 	private static ObservableList<Course> courses = FXCollections.observableArrayList();
-	private static List<User> users = new ArrayList<User>();
+	private static ObservableList<User> users = FXCollections.observableArrayList();
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 	private static ReadJSONAtlas readJSONAtlas = new ReadJSONAtlas();
@@ -33,7 +31,7 @@ public class MainAPP extends Application {
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("VR DESKTOP APP");
-		this.primaryStage.getIcons().add(new Image("file:./src/main/resources/Image/logowhite.png"));
+		this.primaryStage.getIcons().add(new Image("file:./src/main/resources/Image/gafas-vr.png"));
 		initRootLayout();
 		showCourseOverview();
 	}
@@ -74,7 +72,7 @@ public class MainAPP extends Application {
 		return courses;
 	}
 
-	public List<User> getUsers() throws IOException {
+	public ObservableList<User> getUsers() throws IOException {
 		return users;
 	}
 	
@@ -89,7 +87,7 @@ public class MainAPP extends Application {
 	        dialogStage.setTitle("Edit Course");
 	        dialogStage.initModality(Modality.WINDOW_MODAL);
 	        dialogStage.initOwner(primaryStage);
-	        dialogStage.getIcons().add(new Image("file:./src/main/resources/Image/logowhite.png"));
+	        dialogStage.getIcons().add(new Image("file:./src/main/resources/Image/gafas-vr.png"));
 	        Scene scene = new Scene(page);
 	        dialogStage.setScene(scene);
 
@@ -118,7 +116,6 @@ public class MainAPP extends Application {
 //	}
 
 	public static void main(String[] args) throws IOException {
-		
 		courses = readJSONAtlas.getAllCourses();
 		users = readJSONAtlas.getAllUsers();
 		launch(args);

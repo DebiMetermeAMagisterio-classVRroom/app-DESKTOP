@@ -2,18 +2,15 @@ package mainVR;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.json.simple.parser.ParseException;
 
-import Configuration.ConfigMongoConnection;
 import ListViewConfig.CourseListViewCellFactory;
 import ListViewConfig.StudentListViewCellFactory;
 import ListViewConfig.TeacherListViewCellFactory;
 import ListViewConfig.UserListViewCellFactory;
+import config.ConfigMongoConnection;
 import constants.ExceptionConstants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -80,6 +77,8 @@ public class CourseOverviewController {
 
 	private ObservableList<User> users = FXCollections.observableArrayList();
 
+	private ObservableList<Button> buttons =  FXCollections.observableArrayList();
+	
 	private ExceptionConstants exceptionConstants = new ExceptionConstants();
 
 	private ConfigMongoConnection configMongoConnection = new ConfigMongoConnection();
@@ -92,18 +91,15 @@ public class CourseOverviewController {
 	@FXML
 	private void initialize() throws IOException{
 		courses = mainAPP.getCourses();
+		users = mainAPP.getUsers();
 		setListCourse();
 		setListButton();
+		setAllUsers();
 
 		showCourseDetails(null);
 
 		listViewCourses.getSelectionModel().selectedItemProperty().addListener(
-				(observable, oldValue, newValue) -> {try {
-					showCourseDetails(newValue);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				});
+				(observable, oldValue, newValue) -> showCourseDetails(newValue));
 
 	}
 
@@ -117,7 +113,6 @@ public class CourseOverviewController {
 	}
 
 	public void setListButton(){
-		ObservableList<Button> buttons =  FXCollections.observableArrayList();
 		for(int i=0; i<listViewCourses.getItems().size(); i++) {
 			Button button = new Button();
 			ImageView imageViewDelete = new ImageView();
@@ -145,7 +140,7 @@ public class CourseOverviewController {
 		listViewImage.getChildren().addAll(buttons);
 	}
 
-	public void setAllUsers(ObservableList<User> users) throws IOException{
+	public void setAllUsers() throws IOException{
 		listViewUsers.setItems(users);
 		listViewUsers.setCellFactory(new UserListViewCellFactory());
 	}
@@ -160,72 +155,41 @@ public class CourseOverviewController {
 		listViewStudents.setCellFactory(new StudentListViewCellFactory());
 	}
 
-	private void showCourseDetails(Course course) throws IOException {
-		users.clear();
+	private void showCourseDetails(Course course) {
 		ObservableList<User> teachers = FXCollections.observableArrayList();
 		ObservableList<User> students = FXCollections.observableArrayList();
-		List<User> usersTemp = new ArrayList<User>();
-		List<User> usersMo = new ArrayList<User>();
+//
 		if(course != null) {
-			usersTemp = mainAPP.getUsers();
-			
-			for(User user: usersTemp) {
+			for(User user: users) {
 				for(Teacher teacher: course.getSubscriber().getTeachers()) {
 					if (teacher.getId() == user.getId()) {
 						teachers.add(user);
-						break;
 					}
-					
 				}
-				
+
 				for(Student student: course.getSubscriber().getStudents()) {
 					if(student.getId() == user.getId()) {
 						students.add(user);
-						break;
 					}
 				}
-				
 			}
-//			newList = listaB.stream().filter(p -> !listaA.contains(p)).collect(Collectors.toList());
-			usersMo = usersTemp.stream().filter(p -> !teachers.contains(p)).collect(Collectors.toList());
-			System.out.println("1. " + usersMo);
-			usersMo = usersMo.stream().filter(p -> !students.contains(p)).collect(Collectors.toList());
-			users.addAll(usersMo);
 			labelTitleDetails.setText(course.getTitle());
 			labelDescriptionDetails.setText(course.getDescription());
 			setAllTeachers(teachers);
 			setAllStudents(students);
-			setAllUsers(users);
-			
-			
 		}else {
-			usersTemp.clear();
 			labelTitleDetails.setText("");
 			labelDescriptionDetails.setText("");
 			setAllTeachers(null);
 			setAllStudents(null);
-			setAllUsers(null);
 		}
-	}
-
-	@FXML
-	private void handleNewCourse() throws IOException, ParseException {
-		Course tempCourse = new Course();
-		boolean okClicked = mainAPP.showCourseEditDialog(tempCourse);
-
-		if (okClicked) {
-			configMongoConnection.insertCourse(tempCourse.getTitle(), tempCourse.getDescription());
-			tempCourse = readJSONAtlas.getCourse(tempCourse.getTitle());
-			mainAPP.getCourses().add(tempCourse);
-			listViewImage.getChildren().clear();
-		} 
-		setListButton();
 	}
 
 	private void handleDeleteCourseOverview(String id) throws IOException {
 		String[] errorMessage = exceptionConstants.CONFIRMATION_DELETE_DATA.split("-");
 
 		int selectedIndex = listViewCourses.getSelectionModel().getSelectedIndex();
+
 		if(selectedIndex >= 0) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle(errorMessage[0]);
@@ -240,7 +204,8 @@ public class CourseOverviewController {
 						listViewImage.getChildren().clear();
 					}
 				}
-				listViewCourses.getItems().remove(listViewCourses.getSelectionModel().getSelectedItem());
+				listViewCourses.getItems().remove(selectedIndex);
+				setListButton();
 			}
 		}else {
 			errorMessage = exceptionConstants.NO_VALID_DATA.split("-");
@@ -250,8 +215,8 @@ public class CourseOverviewController {
 			alert.setContentText(errorMessage[2]);
 			alert.showAndWait();
 		}
-		setListButton();
 	}
+	//revisar esto
 
 	@FXML
 	private void handleEditTeacher() {
@@ -291,7 +256,7 @@ public class CourseOverviewController {
 			alert.showAndWait();
 		}
 	}
-
+	
 	@FXML
 	private void handleEditStudent() {
 		String[] errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
@@ -330,7 +295,7 @@ public class CourseOverviewController {
 			alert.showAndWait();
 		}
 	}
-
+	
 	@FXML
 	private void handleRemoveTeacher() {
 		String[] errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
@@ -338,10 +303,38 @@ public class CourseOverviewController {
 		User selectedTeacher = listViewTeachers.getSelectionModel().getSelectedItem();
 		if(selectedCourse != null) {
 			if(selectedTeacher != null) {
-				listViewTeachers.getItems().remove(selectedTeacher);
+				listViewTeachers.getSelectionModel().getSelectedItems().remove(selectedTeacher.getId());
 				configMongoConnection.deleteTeacher(selectedCourse.getTitle(), selectedTeacher.getId());
 			} else {
-				//				errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
+//				errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle(errorMessage[0]);
+				alert.setHeaderText(errorMessage[1]);
+				alert.setContentText(errorMessage[2]);
+				alert.showAndWait();
+			}
+		}else {
+			errorMessage = exceptionConstants.NO_COURSE_SELECTED.split("-");
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle(errorMessage[0]);
+			alert.setHeaderText(errorMessage[1]);
+			alert.setContentText(errorMessage[2]);
+
+			alert.showAndWait();
+		}
+	}
+	
+	@FXML
+	private void handleRemoveStudent() {
+		String[] errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
+		Course selectedCourse = listViewCourses.getSelectionModel().getSelectedItem();
+		User selectedStudent = listViewStudents.getSelectionModel().getSelectedItem();
+		if(selectedCourse != null) {
+			if(selectedStudent != null) {
+				listViewStudents.getSelectionModel().getSelectedItems().remove(selectedStudent.getId());
+				configMongoConnection.deleteStudent(selectedCourse.getTitle(), selectedStudent.getId());
+			}else {
+//				errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle(errorMessage[0]);
 				alert.setHeaderText(errorMessage[1]);
@@ -357,33 +350,22 @@ public class CourseOverviewController {
 			alert.showAndWait();
 		}
 	}
+	
+	
 
 	@FXML
-	private void handleRemoveStudent() {
-		String[] errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
-		Course selectedCourse = listViewCourses.getSelectionModel().getSelectedItem();
-		User selectedStudent = listViewStudents.getSelectionModel().getSelectedItem();
-		User selectedUser = listViewUsers.getSelectionModel().getSelectedItem();
-		if(selectedCourse != null) {
-			if(selectedStudent != null) {
-				listViewStudents.getItems().remove(selectedStudent);
-				listViewUsers.getItems().remove(selectedUser);
-				configMongoConnection.deleteStudent(selectedCourse.getTitle(), selectedStudent.getId());
-			}else {
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle(errorMessage[0]);
-				alert.setHeaderText(errorMessage[1]);
-				alert.setContentText(errorMessage[2]);
-				alert.showAndWait();
-			}
-		}else {
-			errorMessage = exceptionConstants.NO_COURSE_SELECTED.split("-");
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle(errorMessage[0]);
-			alert.setHeaderText(errorMessage[1]);
-			alert.setContentText(errorMessage[2]);
-			alert.showAndWait();
-		}
+	private void handleNewCourse() throws IOException, ParseException {
+		Course tempCourse = new Course();
+		boolean okClicked = mainAPP.showCourseEditDialog(tempCourse);
+
+		if (okClicked) {
+			configMongoConnection.insertCourse(tempCourse.getTitle(), tempCourse.getDescription());
+			tempCourse = readJSONAtlas.getCourse(tempCourse.getTitle());
+			mainAPP.getCourses().add(tempCourse);
+			listViewImage.getChildren().clear();
+			setListButton();
+		} 
+
 	}
 
 }
