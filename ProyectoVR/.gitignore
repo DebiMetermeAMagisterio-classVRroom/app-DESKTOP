@@ -1,3 +1,6 @@
 /target/
 /.metadata/
 .env
+/APIVRDesktop/
+.zip
+/.idea/
