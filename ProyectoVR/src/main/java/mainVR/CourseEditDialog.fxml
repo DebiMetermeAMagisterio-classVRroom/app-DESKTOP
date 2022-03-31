@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainVR.CourseEditDialogController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" stylesheets="@StyleTheme.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainVR.CourseEditDialogController">
    <children>
       <Label layoutX="104.0" layoutY="14.0" text="COURSE MANAGING" AnchorPane.leftAnchor="104.0" AnchorPane.topAnchor="5.0">
          <font>
@@ -52,18 +52,18 @@
       </GridPane>
       <HBox layoutX="116.0" layoutY="146.0" prefHeight="40.0" prefWidth="267.0">
          <children>
-            <Button minHeight="30.0" mnemonicParsing="false" onAction="#handleOk" prefWidth="70.0" text="OK">
+            <Button minHeight="30.0" mnemonicParsing="false" onAction="#handleOk" prefWidth="82.0" text="OK">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
                <HBox.margin>
-                  <Insets bottom="5.0" left="60.0" right="5.0" top="5.0" />
+                  <Insets bottom="5.0" left="50.0" right="5.0" top="5.0" />
                </HBox.margin>
                <padding>
                   <Insets right="10.0" />
                </padding>
             </Button>
-            <Button minHeight="30.0" mnemonicParsing="false" onAction="#handleCancel" prefWidth="70.0" text="CANCEL">
+            <Button minHeight="30.0" mnemonicParsing="false" onAction="#handleCancel" prefWidth="82.0" text="CANCEL">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>

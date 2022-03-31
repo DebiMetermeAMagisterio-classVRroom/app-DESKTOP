@@ -168,23 +168,19 @@ public class CourseOverviewController {
 		List<User> usersMo = new ArrayList<User>();
 		if(course != null) {
 			usersTemp = mainAPP.getUsers();
-
 			for(User user: usersTemp) {
 				for(Teacher teacher: course.getSubscriber().getTeachers()) {
 					if (teacher.getId() == user.getId()) {
 						teachers.add(user);
 						break;
 					}
-
 				}
-
 				for(Student student: course.getSubscriber().getStudents()) {
 					if(student.getId() == user.getId()) {
 						students.add(user);
 						break;
 					}
 				}
-
 			}
 			usersMo = usersTemp.stream().filter(p -> !teachers.contains(p)).collect(Collectors.toList());
 			usersMo = usersMo.stream().filter(p -> !students.contains(p)).collect(Collectors.toList());
@@ -194,8 +190,6 @@ public class CourseOverviewController {
 			setAllTeachers(teachers);
 			setAllStudents(students);
 			setAllUsers(users);
-
-
 		}else {
 			usersTemp.clear();
 			labelTitleDetails.setText("");
@@ -216,7 +210,9 @@ public class CourseOverviewController {
 			tempCourse = readJSONAtlas.getCourse(tempCourse.getTitle());
 			mainAPP.getCourses().add(tempCourse);
 			listViewImage.getChildren().clear();
-		} 
+		}else {
+			listViewImage.getChildren().clear();
+		}
 		setListButton();
 	}
 
