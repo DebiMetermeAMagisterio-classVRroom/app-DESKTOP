@@ -168,27 +168,25 @@ public class CourseOverviewController {
 		List<User> usersMo = new ArrayList<User>();
 		if(course != null) {
 			usersTemp = mainAPP.getUsers();
-			
+
 			for(User user: usersTemp) {
 				for(Teacher teacher: course.getSubscriber().getTeachers()) {
 					if (teacher.getId() == user.getId()) {
 						teachers.add(user);
 						break;
 					}
-					
+
 				}
-				
+
 				for(Student student: course.getSubscriber().getStudents()) {
 					if(student.getId() == user.getId()) {
 						students.add(user);
 						break;
 					}
 				}
-				
+
 			}
-//			newList = listaB.stream().filter(p -> !listaA.contains(p)).collect(Collectors.toList());
 			usersMo = usersTemp.stream().filter(p -> !teachers.contains(p)).collect(Collectors.toList());
-			System.out.println("1. " + usersMo);
 			usersMo = usersMo.stream().filter(p -> !students.contains(p)).collect(Collectors.toList());
 			users.addAll(usersMo);
 			labelTitleDetails.setText(course.getTitle());
@@ -196,8 +194,8 @@ public class CourseOverviewController {
 			setAllTeachers(teachers);
 			setAllStudents(students);
 			setAllUsers(users);
-			
-			
+
+
 		}else {
 			usersTemp.clear();
 			labelTitleDetails.setText("");
@@ -236,7 +234,6 @@ public class CourseOverviewController {
 				for(Course course: courses) {
 					if(course.getId().equals(listViewCourses.getSelectionModel().getSelectedItem().getId())) {
 						configMongoConnection.deleteDocument(course.getTitle());
-						//						mainAPP.getCourses().remove(course.getId());
 						listViewImage.getChildren().clear();
 					}
 				}
@@ -258,32 +255,13 @@ public class CourseOverviewController {
 		String[] errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
 		Course selectedCourse = listViewCourses.getSelectionModel().getSelectedItem();
 		User selectedUser = listViewUsers.getSelectionModel().getSelectedItem();
-		if(selectedCourse != null) {
-			if(selectedUser != null) {
-				for(User user: listViewUsers.getSelectionModel().getSelectedItems()) {
-					if(listViewTeachers.getItems().contains(user) || listViewStudents.getItems().contains(user)) {
-						errorMessage = exceptionConstants.USER_DUPLICATED.split("-");
-						Alert alert = new Alert(AlertType.WARNING);
-						alert.setTitle(errorMessage[0]);
-						alert.setHeaderText(errorMessage[1]);
-						alert.setContentText(errorMessage[2]);
-						alert.showAndWait();
-					}
-					else {	
-						listViewTeachers.getItems().add(selectedUser);
-						configMongoConnection.updateTeacher(selectedCourse.getTitle(), user.getId());
-					}
-				}
-			} else {
-				errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle(errorMessage[0]);
-				alert.setHeaderText(errorMessage[1]);
-				alert.setContentText(errorMessage[2]);
-				alert.showAndWait();
+		if(selectedUser != null) {
+			for(User user: listViewUsers.getSelectionModel().getSelectedItems()) {
+				listViewTeachers.getItems().add(selectedUser);
+				listViewUsers.getItems().remove(user);
+				configMongoConnection.updateTeacher(selectedCourse.getTitle(), user.getId());
 			}
-		}else {
-			errorMessage = exceptionConstants.NO_COURSE_SELECTED.split("-");
+		} else {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle(errorMessage[0]);
 			alert.setHeaderText(errorMessage[1]);
@@ -297,32 +275,15 @@ public class CourseOverviewController {
 		String[] errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
 		Course selectedCourse = listViewCourses.getSelectionModel().getSelectedItem();
 		User selectedUser = listViewUsers.getSelectionModel().getSelectedItem();
-		if(selectedCourse != null) {
-			if(selectedUser != null) {
-				for(User user: listViewUsers.getSelectionModel().getSelectedItems()) {
-					if(listViewTeachers.getItems().contains(user) || listViewStudents.getItems().contains(user)) {
-						errorMessage = exceptionConstants.USER_DUPLICATED.split("-");
-						Alert alert = new Alert(AlertType.WARNING);
-						alert.setTitle(errorMessage[0]);
-						alert.setHeaderText(errorMessage[1]);
-						alert.setContentText(errorMessage[2]);
-						alert.showAndWait();
-					}
-					else {	
-						configMongoConnection.updateStudent(selectedCourse.getTitle(), user.getId());
-						listViewStudents.getItems().add(selectedUser);
-					}
-				}
-			} else {
-				errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle(errorMessage[0]);
-				alert.setHeaderText(errorMessage[1]);
-				alert.setContentText(errorMessage[2]);
-				alert.showAndWait();
+		if(selectedUser != null) {
+			for(User user: listViewUsers.getSelectionModel().getSelectedItems()) {
+				configMongoConnection.updateStudent(selectedCourse.getTitle(), user.getId());
+				listViewStudents.getItems().add(selectedUser);
+				listViewUsers.getItems().remove(user);
+				System.out.println(selectedUser);
 			}
-		}else {
-			errorMessage = exceptionConstants.NO_COURSE_SELECTED.split("-");
+		} else {
+			errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle(errorMessage[0]);
 			alert.setHeaderText(errorMessage[1]);
@@ -336,20 +297,20 @@ public class CourseOverviewController {
 		String[] errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
 		Course selectedCourse = listViewCourses.getSelectionModel().getSelectedItem();
 		User selectedTeacher = listViewTeachers.getSelectionModel().getSelectedItem();
-		if(selectedCourse != null) {
-			if(selectedTeacher != null) {
+		if(selectedTeacher != null) {
+			errorMessage = exceptionConstants.CONFIRMATION_DELETE_DATA.split("-");
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle(errorMessage[0]);
+			alert.setHeaderText(errorMessage[1]);
+			alert.setContentText(errorMessage[2]);
+			Optional<ButtonType> action = alert.showAndWait();
+			if(action.get() == ButtonType.OK) {
 				listViewTeachers.getItems().remove(selectedTeacher);
+				listViewUsers.getItems().add(selectedTeacher);
 				configMongoConnection.deleteTeacher(selectedCourse.getTitle(), selectedTeacher.getId());
-			} else {
-				//				errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle(errorMessage[0]);
-				alert.setHeaderText(errorMessage[1]);
-				alert.setContentText(errorMessage[2]);
-				alert.showAndWait();
+				System.out.println(selectedTeacher);
 			}
-		}else {
-			errorMessage = exceptionConstants.NO_COURSE_SELECTED.split("-");
+		} else {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle(errorMessage[0]);
 			alert.setHeaderText(errorMessage[1]);
@@ -363,21 +324,19 @@ public class CourseOverviewController {
 		String[] errorMessage = exceptionConstants.NO_USER_SELECTED.split("-");
 		Course selectedCourse = listViewCourses.getSelectionModel().getSelectedItem();
 		User selectedStudent = listViewStudents.getSelectionModel().getSelectedItem();
-		User selectedUser = listViewUsers.getSelectionModel().getSelectedItem();
-		if(selectedCourse != null) {
-			if(selectedStudent != null) {
+		if(selectedStudent != null) {
+			errorMessage = exceptionConstants.CONFIRMATION_DELETE_DATA.split("-");
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle(errorMessage[0]);
+			alert.setHeaderText(errorMessage[1]);
+			alert.setContentText(errorMessage[2]);
+			Optional<ButtonType> action = alert.showAndWait();
+			if(action.get() == ButtonType.OK) {
 				listViewStudents.getItems().remove(selectedStudent);
-				listViewUsers.getItems().remove(selectedUser);
+				listViewUsers.getItems().add(selectedStudent);
 				configMongoConnection.deleteStudent(selectedCourse.getTitle(), selectedStudent.getId());
-			}else {
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle(errorMessage[0]);
-				alert.setHeaderText(errorMessage[1]);
-				alert.setContentText(errorMessage[2]);
-				alert.showAndWait();
 			}
 		}else {
-			errorMessage = exceptionConstants.NO_COURSE_SELECTED.split("-");
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle(errorMessage[0]);
 			alert.setHeaderText(errorMessage[1]);
